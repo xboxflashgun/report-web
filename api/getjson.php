@@ -27,7 +27,7 @@ function getcatalogs()	{
 		"country" => "countryid as id,country as name,name as desc from stattotals1 join countries using(countryid)",
 		"lang" => "langid as id,lang as name,name as desc from stattotals1 join languages using(langid)",
 		"genre" => "genreid as id,genre as name,'' as desc from genres join gamegenres using(genreid) join stattotals1 using(titleid)",
-		"game" => "titleid as id,name,'' as desc from games join stattotals1 using(titleid)"
+		"game" => "games.titleid as id,name,'' as desc from games join repstat using(titleid)"
 	);
 
 	foreach ($cats as $k => $v)
