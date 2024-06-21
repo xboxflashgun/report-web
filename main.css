@@ -71,3 +71,22 @@ body {
 	overflow-y: scroll;
 	height: 700px;
 }
+
+input[type="text"] {
+	margin-left: 30px;
+	border: none;
+	border-bottom: 1px solid #999;
+	background-color: #222;
+	color: #999;
+}
+
+input[type="text"]:focus {
+	outline: none;
+	background-color: #333;
+}
+
+.tablist td:nth-child(n+2) {
+	text-align: right;
+	padding: 0px 10px;
+}
+

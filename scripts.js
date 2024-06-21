@@ -29,7 +29,6 @@ var period = 1;
 
 function main()	{
 
-	console.log('hi');
 	read_catalogs();
 	d3.selectAll(".permark").classed("permark", false);
 	d3.select(`#periodselect th:nth-child(${5 - period})`).classed("permark", true);
