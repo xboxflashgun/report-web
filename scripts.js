@@ -64,7 +64,24 @@ function read_data(b)	{
 	return fetch("api/gettsv.php?f=getblock" + req)
 	.then( res => res.text() )
 	.then( res => {
-		console.log(b, res);
+
+		blocks[b].data = [];
+
+		res.split('\n').forEach( s => {
+
+			if(s.length === 0)
+				return;
+
+			var [ id, players, secs ] = s.split('\t');
+			if( id != 0 )
+				blocks[b].data.push( { id: id, players: +players, secs: +secs } );
+			else
+				[ blocks[b].players, blocks[b].secs ] = [ +players, +secs ];
+
+		});
+
+		draw_table(b);
+
 	});
 
 }
@@ -72,13 +89,11 @@ function read_data(b)	{
 function mkreqstr()	{
 
 	var req = "&period=" + period;
-	req += "&subj=" + d3.select('#infodiv input[name="graph"]:checked').property("value");
+	req += "&subj=" + d3.select('#info input[name="graph"]:checked').property("value");
 	Object.keys(blocks).forEach( b => {
 		if(blocks[b].sels)
 			req += "&" + b + "=" + Array.from(blocks[b].sels).join(',')
 	});
-
-	console.log("req: ", req);
 
 	return req;
 

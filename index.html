@@ -7,10 +7,11 @@
 	<link rel="stylesheet" type="text/css" href="main.css">
 	<script src="/d3.v7.min.js"></script>
 	<script src="scripts.js"></script>
+	<script src="table.js"></script>
 </head>
 <body onload="main()">
 	<div>
-		<div id="infodiv">
+		<div id="info">
 			<table id="periodselect"><tr>
 				<th>Y</th>
 				<th>Q</th>
@@ -42,20 +43,35 @@
 		</div>
 		<div id="country">
 			<div><input type="text" size="20" maxlength="40" /></div>
-			<table>
-				<tbody>
-				</tbody>
-			</table>
+			<div class="scroll">
+				<table>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
 		</div>
 		<div id="lang">
 			<div><input type="text" size="20" maxlength="40" /></div>
-			<table>
-				<tbody>
-				</tbody>
-			</table>
+			<div class="scroll">
+				<table>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
 		</div>
 		<div id="genre">
 			<div><input type="text" size="20" maxlength="40" /></div>
+			<div class="scroll">
+				<table>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div id="game">
+		<div><input type="text" size="20" maxlength="40" /></div>
+		<div id="gamescroll">
 			<table>
 				<tbody>
 				</tbody>

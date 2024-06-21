@@ -8,8 +8,9 @@ body {
 	background-color: #222;
 }
 
-#infodiv {
+#info {
 	width: 256px;
+	height: 184px;
 	float: left;
 	border: 1px solid #999;
 }
@@ -39,15 +40,34 @@ body {
 
 #country {
 	width: 390px;
+	height: 186px;
 	float: left;
 }
 
 #lang {
 	width: 390px;
+	height: 186px;
 	float: left;
 }
 
 #genre {
 	width: 390px;
+	height: 186px;
 	float: left;
+}
+
+#game {
+	width: 256px;
+	height: 400px;
+	float: left;
+}
+
+.scroll {
+	overflow-y: scroll;
+	height: 180px;
+}
+
+#gamescroll {
+	overflow-y: scroll;
+	height: 700px;
 }

@@ -59,9 +59,9 @@ function getblock()	{
 	if(strlen($_GET['genre']) > 0 && $block != 'genre')
 		$where .= " and titleid=any(select titleid from gamegenres where genreid=any(array[" . $_GET['genre'] . "]))";
 
-	if( (strlen($_GET['genre']) == 0 && strlen($_GET['game']) == 0) || 
-		($block != 'genre' || $block != 'game') )
-		$where .= ' and titleid=0';
+	if(strlen($_GET['genre']) == 0 && strlen($_GET['game']) == 0) 
+		if($block != 'genre' && $block != 'game')
+			$where .= ' and titleid=0';
 
 	$join = ($block == 'genre') ? "join gamegenres using(titleid)" : "";
 	$select = ($block == 'game') ? "title" : $block;
@@ -73,7 +73,6 @@ function getblock()	{
 		$join
 		where $where
 		group by 1
-		limit 10
 	";
 
 	error_log($req);
