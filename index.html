@@ -9,6 +9,37 @@
 	<script src="scripts.js"></script>
 </head>
 <body onload="main()">
+	<div>
+		<div id="infodiv">
+			<table id="periodselect"><tr>
+				<th>Y</th>
+				<th>Q</th>
+				<th>M</th>
+				<th>D</th>
+				<th>W</th>
+			</tr></table>
+			<table id="valselect">
+				<tr>
+					<td><label><input type="radio" name="valtype" value="players" checked>Players</label></td>
+					<td><label><input type="radio" name="valform" value="abs" checked>Absolute numbers</label></td>
+				</tr><tr>
+					<td><label><input type="radio" name="valtype" value="time">Time (hours)</label></td>
+					<td><label><input type="radio" name="valform" value="perc">Percentage</label></td>
+				</tr>
+			</table>
+			<table id="graphsel">
+				<tr><td><label><input type="radio" name="graph" value="players" checked>Players</label></td>
+					<td>?V</td><td>100%</td></tr>
+				<tr><td><label><input type="radio" name="graph" value="games">Games</label></td>
+					<td>?V</td><td>100%</td></tr>
+				<tr><td><label><input type="radio" name="graph" value="countries">Countries</label></td>
+					<td>?V</td><td>100%</td></tr>
+				<tr><td><label><input type="radio" name="graph" value="langs">Languages</label></td>
+					<td>?V</td><td>100%</td></tr>
+				<tr><td><label><input type="radio" name="graph" value="genres">Genres</label></td>
+					<td>?V</td><td>100%</td></tr>
+		</div>
+	</div>
 </body>
 </html>
 

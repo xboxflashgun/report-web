@@ -1,2 +1,33 @@
+body {
+	font-family: Roboto,Helvetica Neue,Arial,sans-serif;
+	font-size: 12px;
+	width: 1440px;
+	margin: auto;
+	color: #aaa;
+	margin-top: 5px;
+	background-color: #222;
+}
 
+#infodiv {
+	width: 300px;
+	float: left;
+	border: 1px solid #999;
+}
 
+#periodselect {
+	width: 100%;
+	border-bottom: 1px solid #999;
+}
+
+#valselect {
+	width: 100%;
+	border-bottom: 1px solid #999;
+}
+
+#valselect td {
+	width: 50%;
+}
+
+#graphsel {
+	width: 100%;
+}
