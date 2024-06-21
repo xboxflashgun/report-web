@@ -13,7 +13,8 @@ $db = pg_connect("port=6432 dbname=global user=readonly password=masha27uk")	# ,
 
 $rep = array();
 
-$_GET['f']();
+if( substr( $_GET['f'], 0, 3) == 'get' )
+	$_GET['f']();
 
 echo json_encode($rep, JSON_UNESCAPED_UNICODE);
 

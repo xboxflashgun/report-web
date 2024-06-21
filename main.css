@@ -9,7 +9,7 @@ body {
 }
 
 #infodiv {
-	width: 300px;
+	width: 256px;
 	float: left;
 	border: 1px solid #999;
 }
@@ -30,4 +30,24 @@ body {
 
 #graphsel {
 	width: 100%;
+}
+
+.permark {
+	color: #000;
+	background-color: #999;
+}
+
+#country {
+	width: 390px;
+	float: left;
+}
+
+#lang {
+	width: 390px;
+	float: left;
+}
+
+#genre {
+	width: 390px;
+	float: left;
 }
