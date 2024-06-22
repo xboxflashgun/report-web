@@ -58,13 +58,11 @@ function read_catalogs()	{
 		Promise.all(pr)
 		.then( ()=> {
 
-			draw_table('genre', 0);		// block.players and block.secs are ready
-
 			// block data is read
 			d3.select("#valselect").selectAll("input").on('change', () => {
 				Object.keys(blocks).forEach( b => {
 					if(blocks[b].data)
-						draw_table(b, 0);
+						draw_table(b);
 				});
 
 			});
@@ -97,9 +95,18 @@ function read_data(b)	{
 
 		});
 
-		draw_table(b, 1);
-		if(b === 'game')
-			[ blocks['genre'].players, blocks['genre'].secs ] = [ blocks[b].players, blocks[b].secs ];
+		draw_table(b);
+
+	});
+
+}
+
+function read_alldata()	{
+
+	Object.keys(blocks).forEach( b => {
+
+		if(blocks[b].data)
+			read_data(b);
 
 	});
 

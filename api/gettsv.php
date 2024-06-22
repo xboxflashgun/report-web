@@ -42,6 +42,7 @@ function getblock()	{
 
 	$block = $_GET['block'];
 	$where = "true";
+	$union = "";
 
 	if(strlen($_GET['country']) > 0 && $block != 'country')
 		$where .= " and countryid=any(array[" . $_GET['country'] . "])";
@@ -67,12 +68,22 @@ function getblock()	{
 	$select = ($block == 'game') ? "title" : $block;
 	$select .= "id";
 
+	if($block == 'genre')
+		$union = "
+		union
+		select 0,sum(players),sum(secs)
+		from repstat
+		where $where
+		group by 1
+	";
+
 	$req = "
 		select $select,sum(players),sum(secs)
 		from repstat
 		$join
 		where $where
 		group by 1
+		$union
 	";
 
 	error_log($req);

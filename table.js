@@ -1,7 +1,4 @@
-function draw_table(b, f)	{
-
-	if(b === 'genre' && f)
-		return;
+function draw_table(b)	{
 
 	var block = blocks[b];
 	var tab = d3.select("#" + b + " tbody");
@@ -49,6 +46,21 @@ function draw_table(b, f)	{
 		update.select("td:nth-child(3)").attr("title", d => 100 * d.valper + "%").text(d => d3.format(".3%")(d.valper));
 	}, exit => exit.remove()
 	);
+
+	tab.selectAll("tr").style('color', null);
+	Array.from(block.sels).forEach( id => tab.select(`tr[data-id="${id}"]`).style('color', '#fff') );
+
+	tab.selectAll("tr").on('click', e => {
+		var id = e.target.parentNode.dataset.id;
+		console.log(b, id); 
+		if(block.sels.has(id))
+			block.sels.delete(id);
+		else
+			block.sels.add(id);
+
+		read_alldata();
+
+	});
 
 }
 

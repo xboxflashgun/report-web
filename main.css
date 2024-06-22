@@ -90,6 +90,14 @@ input[type="text"]:focus {
 	padding: 0px 10px;
 }
 
+.tablist tr {
+	cursor: pointer;
+}
+
+.tablist tr:hover {
+	background-color: #333;
+}
+
 #country td:nth-child(1) {
 	max-width: 256px;
 	white-space: nowrap;
