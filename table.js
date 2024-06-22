@@ -56,7 +56,6 @@ function draw_table(b)	{
 
 	tab.selectAll("tr").on('click', e => {
 		var id = e.target.parentNode.dataset.id;
-		console.log(b, id); 
 		if(block.sels.has(id))
 			block.sels.delete(id);
 		else

@@ -54,6 +54,8 @@ function read_catalogs()	{
 			pr.push(read_data(b));
 
 		});
+		
+		read_info();
 
 		Promise.all(pr)
 		.then( ()=> {
@@ -107,6 +109,27 @@ function read_alldata()	{
 
 		if(blocks[b].data)
 			read_data(b);
+
+	});
+
+	read_info();
+
+}
+
+function read_info() {
+
+	var req = mkreqstr();
+	fetch("api/getjson.php?f=getinfo" + req)
+	.then( res => res.json() )
+	.then( res => {
+
+		console.log(res);
+		var tab = d3.select("#graphsel");
+		tab.select("tr:nth-child(1) td:nth-child(2)").text(res[1][0].players);
+		tab.select("tr:nth-child(2) td:nth-child(2)").text(res[0][0].games);
+		tab.select("tr:nth-child(3) td:nth-child(2)").text(res[0][0].countries);
+		tab.select("tr:nth-child(4) td:nth-child(2)").text(res[0][0].langs);
+		tab.select("tr:nth-child(5) td:nth-child(2)").text(res[0][0].genres);
 
 	});
 

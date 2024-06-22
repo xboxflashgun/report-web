@@ -86,7 +86,7 @@ function getblock()	{
 		$union
 	";
 
-	error_log($req);
+	# error_log($req);
 
 	$rep = implode(pg_copy_to($db, "( $req )", chr(9)));
 

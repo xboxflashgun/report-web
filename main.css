@@ -33,6 +33,10 @@ body {
 	width: 100%;
 }
 
+#graphsel td:nth-child(2)	{
+	text-align: right;
+}
+
 .permark {
 	color: #000;
 	background-color: #999;
