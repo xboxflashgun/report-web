@@ -37,6 +37,8 @@ function main()	{
 
 function read_catalogs()	{
 
+	var pr = [];
+
 	fetch("api/getjson.php?f=getcatalogs")
 	.then( res => res.json() )
 	.then( res => {
@@ -49,7 +51,23 @@ function read_catalogs()	{
 					desc: (a.desc == "") ? undefined : a.desc,
 				});
 
-			read_data(b);
+			pr.push(read_data(b));
+
+		});
+
+		Promise.all(pr)
+		.then( ()=> {
+
+			draw_table('genre', 0);		// block.players and block.secs are ready
+
+			// block data is read
+			d3.select("#valselect").selectAll("input").on('change', () => {
+				Object.keys(blocks).forEach( b => {
+					if(blocks[b].data)
+						draw_table(b, 0);
+				});
+
+			});
 
 		});
 
@@ -79,7 +97,9 @@ function read_data(b)	{
 
 		});
 
-		draw_table(b);
+		draw_table(b, 1);
+		if(b === 'game')
+			[ blocks['genre'].players, blocks['genre'].secs ] = [ blocks[b].players, blocks[b].secs ];
 
 	});
 

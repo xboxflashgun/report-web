@@ -1,4 +1,7 @@
-function draw_table(b)	{
+function draw_table(b, f)	{
+
+	if(b === 'genre' && f)
+		return;
 
 	var block = blocks[b];
 	var tab = d3.select("#" + b + " tbody");
@@ -7,7 +10,7 @@ function draw_table(b)	{
 	var abflg = d3.select('input[value="abs"]').property("checked");
 
 	block.data.forEach( d => {
-		d.valabs = (plflg) ? d.players : d.secs/block.players/3600;
+		d.valabs = (plflg) ? d.players : d.secs/d.players/3600;
 		d.valper = d.valabs / ( (plflg) ? block.players : block.secs );
 		d.val = (abflg) ? d.valabs : d.valper;
 	});
@@ -34,12 +37,16 @@ function draw_table(b)	{
 	.join( enter => {
 		var row = enter.append("tr");
 		row.attr("data-id", d => d.id);
-		row.append("td").text(d => block.name[d.id].name);
-		row.append("td").text(d => d3.format(".3~s")(d.valabs));
-		row.append("td").text(d => d3.format(".3%")(d.valper));
+		row.append("td").attr("title", d => block.name[d.id].desc ? block.name[d.id].desc : block.name[d.id].name)
+			.text(d => (block.name[d.id].desc) ? block.name[d.id].desc : block.name[d.id].name);
+		row.append("td").attr("title", d => d.valabs).text(d => d3.format(".3~s")(d.valabs));
+		row.append("td").attr("title", d => 100 * d.valper + "%").text(d => d3.format(".3%")(d.valper));
 	}, update => {
 		update.attr("data-id", d => d.id);
-		update.select("td:nth-child(1)").text(d => block.name[d.id].name);
+		update.select("td:nth-child(1)").attr("title", d => block.name[d.id].desc ? block.name[d.id].desc : block.name[d.id].name)
+			.text(d => (block.name[d.id].desc) ? block.name[d.id].desc : block.name[d.id].name);
+		update.select("td:nth-child(2)").attr("title", d => d.valabs).text(d => d3.format(".3~s")(d.valabs));
+		update.select("td:nth-child(3)").attr("title", d => 100 * d.valper + "%").text(d => d3.format(".3%")(d.valper));
 	}, exit => exit.remove()
 	);
 

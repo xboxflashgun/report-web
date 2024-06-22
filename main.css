@@ -9,7 +9,7 @@ body {
 }
 
 #info {
-	width: 256px;
+	width: 400px;
 	height: 184px;
 	float: left;
 	border: 1px solid #999;
@@ -45,19 +45,19 @@ body {
 }
 
 #lang {
-	width: 390px;
+	width: 300px;
 	height: 186px;
 	float: left;
 }
 
 #genre {
-	width: 390px;
+	width: 330px;
 	height: 186px;
 	float: left;
 }
 
 #game {
-	width: 256px;
+	width: 400px;
 	height: 400px;
 	float: left;
 }
@@ -89,4 +89,19 @@ input[type="text"]:focus {
 	text-align: right;
 	padding: 0px 10px;
 }
+
+#country td:nth-child(1) {
+	max-width: 256px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#game td:nth-child(1) {
+	max-width: 270px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 
