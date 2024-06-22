@@ -7,7 +7,7 @@ function draw_table(b)	{
 	var abflg = d3.select('input[value="abs"]').property("checked");
 
 	block.data.forEach( d => {
-		d.valabs = (plflg) ? d.players : d.secs/d.players/3600;
+		d.valabs = (plflg) ? d.players : d.secs/3600;
 		d.valper = d.valabs / ( (plflg) ? block.players : block.secs );
 		d.val = (abflg) ? d.valabs : d.valper;
 	});
@@ -22,6 +22,8 @@ function draw_table(b)	{
 		fff = a => a.toLowerCase().indexOf(str) >= 0;
 	else
 		fff = a => true;
+
+	var valmax = d3.max(block.data.filter(d => fff(block.name[d.id].name)), d => d.valabs);
 
 	input.on('input', () => draw_table(b) );
 
@@ -38,12 +40,14 @@ function draw_table(b)	{
 			.text(d => (block.name[d.id].desc) ? block.name[d.id].desc : block.name[d.id].name);
 		row.append("td").attr("title", d => d.valabs).text(d => d3.format(".3~s")(d.valabs));
 		row.append("td").attr("title", d => 100 * d.valper + "%").text(d => d3.format(".3%")(d.valper));
+		row.style("background", d => `linear-gradient(to right, #050 ${100.*d.valabs/valmax}%, rgba(0,0,0,0) ${100.*d.valabs/valmax}% )`);
 	}, update => {
 		update.attr("data-id", d => d.id);
 		update.select("td:nth-child(1)").attr("title", d => block.name[d.id].desc ? block.name[d.id].desc : block.name[d.id].name)
 			.text(d => (block.name[d.id].desc) ? block.name[d.id].desc : block.name[d.id].name);
 		update.select("td:nth-child(2)").attr("title", d => d.valabs).text(d => d3.format(".3~s")(d.valabs));
 		update.select("td:nth-child(3)").attr("title", d => 100 * d.valper + "%").text(d => d3.format(".3%")(d.valper));
+		update.style("background", d => `linear-gradient(to right, #050 ${100.*d.valabs/valmax}%, rgba(0,0,0,0) ${100.*d.valabs/valmax}% )`);
 	}, exit => exit.remove()
 	);
 
