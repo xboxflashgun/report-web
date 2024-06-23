@@ -18,6 +18,11 @@ body {
 #periodselect {
 	width: 100%;
 	border-bottom: 1px solid #999;
+	cursor: pointer;
+}
+
+#periodselect .permark {
+	cursor: default;
 }
 
 #valselect {

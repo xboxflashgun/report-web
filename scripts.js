@@ -25,13 +25,28 @@ var blocks = {
 
 };
 
-var period = 2;
+var period = 1;		// on change do a correction in index also
 
 function main()	{
 
 	read_catalogs();
-	d3.selectAll(".permark").classed("permark", false);
-	d3.select(`#periodselect th:nth-child(${5 - period})`).classed("permark", true);
+	d3.selectAll("#periodselect th").on('click', e => {
+		
+		var p = 4 - e.target.cellIndex;
+		if(p === period)
+			return;
+		period = p;
+
+		d3.selectAll(".permark").classed("permark", false);
+		d3.select(`#periodselect th:nth-child(${5 - period})`).classed("permark", true);
+
+		Object.keys(blocks).forEach( b => {
+			if(blocks[b].data)
+				draw_table(b);
+
+		});
+	
+	});
 
 }
 
