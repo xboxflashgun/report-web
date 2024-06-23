@@ -25,7 +25,7 @@ var blocks = {
 
 };
 
-var period = 1;
+var period = 2;
 
 function main()	{
 

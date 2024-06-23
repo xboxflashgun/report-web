@@ -3,13 +3,29 @@ function draw_table(b)	{
 	var block = blocks[b];
 	var tab = d3.select("#" + b + " tbody");
 
-	var plflg = d3.select('input[value="players"]').property("checked");
+	var units = d3.select('input[name="valtype"]:checked').property("value");
 	var abflg = d3.select('input[value="abs"]').property("checked");
 
+	var ndays = (new Date() - new Date(2024, 2, 3))/3600/24/1000;
+	if(period === 1)
+		ndays /= 7;				// week
+	else if(period === 2)
+		ndays /= 30.6;			// month
+	else if(period === 3)
+		ndays /= 91.3125;		// quarter
+	else if(period === 4)
+		ndays /= 365.25;
+
 	block.data.forEach( d => {
-		d.valabs = (plflg) ? d.players : d.secs/3600;
-		d.valper = d.valabs / ( (plflg) ? block.players : block.secs );
+		if(units === 'players')
+			[ d.valabs, d.valper ] = [ d.players, d.players/block.players ];
+		else if(units === 'time')
+			[ d.valabs, d.valper ] = [ d.secs/3600, d.secs/block.secs ];
+		else
+			[ d.valabs, d.valper ] = [ d.secs/d.players/3600/ndays, (d.secs / d.players) / (block.secs/block.players) ]
+
 		d.val = (abflg) ? d.valabs : d.valper;
+	
 	});
 
 	console.log(b,block);
@@ -23,7 +39,7 @@ function draw_table(b)	{
 	else
 		fff = a => true;
 
-	var valmax = d3.max(block.data.filter(d => fff(block.name[d.id].name)), d => d.valabs);
+	var valmax = d3.max(block.data.filter(d => fff(block.name[d.id].name)), d => d.val);
 
 	input.on('input', () => draw_table(b) );
 
