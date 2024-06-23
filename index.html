@@ -22,10 +22,12 @@
 			<table id="valselect">
 				<tr>
 					<td><label><input type="radio" name="valtype" value="players" checked>Players</label></td>
-					<td><label><input type="radio" name="valform" value="abs" checked>Absolute numbers</label></td>
+					<td rowspan="3"><label><input type="radio" name="valform" value="abs" checked>Absolute numbers</label><br />
+						<label><input type="radio" name="valform" value="perc">Percentage</label></td>
 				</tr><tr>
-					<td><label><input type="radio" name="valtype" value="time">Time (hours)</label></td>
-					<td><label><input type="radio" name="valform" value="perc">Percentage</label></td>
+					<td><label><input type="radio" name="valtype" value="time">Total Time (hours)</label></td>
+				</tr><tr>
+					<td><label><input type="radio" name="valtype" value="avgt">Avg Time (hours)</label></td>
 				</tr>
 			</table>
 			<table id="graphsel">
