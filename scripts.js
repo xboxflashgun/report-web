@@ -50,6 +50,55 @@ function main()	{
 
 }
 
+function list_filters()  {
+
+	var span = d3.select("#filter span");
+	span.selectAll("*").remove();
+
+	Object.keys(blocks).forEach( b => {
+
+		var block = blocks[b];
+		if( !block.sels )
+			return;
+
+		var sp = span.append("span");
+
+		Array.from(block.sels).forEach( id => {
+
+			sp.append("span")
+				.attr("title", block.name[id].desc).text( block.name[id].name )
+				.attr("data-id", id);
+
+		});
+
+		sp.selectAll("span").on("click", e => {
+
+			var id = e.target.dataset.id;
+			block.sels.delete(id);
+			list_filters();
+			read_alldata();
+
+		});
+
+	});
+
+	d3.select("#filtclear").on('click', () => {
+
+		Object.keys(blocks).forEach( b => {
+
+			if(blocks[b].sels)
+				blocks[b].sels.clear();
+
+		});
+
+		list_filters();
+		read_alldata();
+
+	});
+
+}
+
+
 function read_catalogs()	{
 
 	var pr = [];
@@ -138,7 +187,6 @@ function read_info() {
 	.then( res => res.json() )
 	.then( res => {
 
-		console.log(res);
 		var tab = d3.select("#graphsel");
 		tab.select("tr:nth-child(1) td:nth-child(2)").text(res[1][0].players);
 		tab.select("tr:nth-child(2) td:nth-child(2)").text(res[0][0].games);

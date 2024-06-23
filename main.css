@@ -126,4 +126,29 @@ input[type="text"]:focus {
 	text-overflow: ellipsis;
 }
 
+#filter {
+	width: 990px;
+	float: left;
+	background-color: #525;
+	height: 15px;
+	padding-left: 4px;
+}
+
+#filtclear  {
+	float: right;
+	padding-right: 5px;
+	font-size: 14px;
+	color: #ddd;
+	cursor: pointer;
+}
+
+.bulbs span	span {
+	background-color: #c22;
+	padding: 0px 6px;
+	margin: 0px 3px;
+	border-radius: 4px;
+	color: #ddd;
+	font-size: 11px;
+	cursor: pointer;
+}
 

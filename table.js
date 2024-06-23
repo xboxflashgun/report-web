@@ -28,8 +28,6 @@ function draw_table(b)	{
 	
 	});
 
-	console.log(b,block);
-
 	var input = d3.select(`#${b} input[type="text"]`);
 	var str = input.property("value").toLowerCase();
 	var fff;	// filter function
@@ -77,6 +75,7 @@ function draw_table(b)	{
 		else
 			block.sels.add(id);
 
+		list_filters();
 		read_alldata();
 
 	});
