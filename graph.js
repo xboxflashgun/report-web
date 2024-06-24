@@ -188,6 +188,16 @@ function draw_graph()	{
 			var names = [ 'Day', 'Week starting from', 'Month starting from', 'Quarter starting from', 'Year from' ];
 			legend.select(".legendhead").text(names[period] + " " + graph.data[Object.keys(graph.data)[0]][ind-1].time.toLocaleString().slice(0,17));
 
+			Object.keys(graph.data).forEach( id => {
+				if(Math.abs(my - y(graph.data[id][ind-1].val) - margin.top) < 5) {
+					legend.select(`tr[data-id="${id}"]`).style("color", "#fff");
+					svg.selectAll(`path[data-id="${id}"]`).attr("stroke-width", 3);
+				} else {
+					legend.select(`tr[data-id="${id}"]`).style("color", "#999");
+					svg.selectAll(`path[data-id="${id}"]`).attr("stroke-width", 1.5);
+				}
+			});
+
 		})
 		.on("mouseout", () => {
 
