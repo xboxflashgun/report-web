@@ -192,7 +192,7 @@ function draw_graph()	{
 		.on("mouseout", () => {
 
 			vline.select("line").attr("display", "none");
-			console.log("out");
+			legendavg();
 
 		});
 
@@ -235,6 +235,19 @@ function draw_graph()	{
 		update.attr("data-id", d => d);
 	}, exit => exit.remove()
 	);
+
+	function legendavg()	{
+
+		Object.keys(graph.avg).forEach( id => {
+			var tr = legend.select(`tr[data-id="${id}"]`);
+			tr.select("td:nth-child(3)").text( d3.format(abflg ? ".3~s" : ".3%")(graph.avg[id]) );
+			tr.select("td:nth-child(4)").text("");
+		});
+		legend.select(".legendhead").text("Average over graph");
+
+	}
+
+	legendavg();
 
 }
 
