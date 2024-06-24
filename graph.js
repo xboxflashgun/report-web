@@ -48,9 +48,9 @@ function read_graph()	{
 			graph.data[row[1]] ??= [];
 			graph.data[row[1]].push({
 				utime: +row[0],
-				players: +row[2],
+				players: (row[2] === '\\N') ? 0 : +row[2],
 				refpl: +row[3],
-				secs: +row[4],
+				secs: (row[4] === '\\N') ? 0 : +row[4],
 				refsecs: +row[5],
 				time: new Date(+row[0] * 1000),
 			});
