@@ -42,6 +42,7 @@ function getinfo()	{
 	# select count(distinct titleid),count(distinct countryid),count(distinct langid) from repstat
 	# select players,secs from repstat where titleid=0 and countryid=0 and langid=0
 
+	$block = $_GET['block'];
 	$where = "true";
 
 	if(strlen($_GET['country']) > 0)

@@ -98,26 +98,52 @@ function getgraph()	{
 
 	$block = $_GET['block'];
 	$period = $_GET['period'];
-	$list = $_GET['list'];
 	$where = "true";
+	$whref = "true";
 
+	$list = ($block == 'info') ? "0" : $_GET['list'];
 	$sel = ($block == 'info') ? "0" : (($block == 'game') ? "titleid" : $_GET['block']."id");
 
-	if(strlen($_GET['country']) > 0)
+	if(strlen($_GET['country']) > 0) {
 		$where .= " and countryid=any(array[" . $_GET['country'] . "])";
-	else
+		$whref .= " and countryid is not null";
+	} elseif($block == 'country') {
+		$where .= " and countryid is not null";
+		$whref .= " and countryid is not null";
+	} else {
 		$where .= " and countryid is null";
+		$whref .= " and countryid is null";
+	}
 
-	if(strlen($_GET['lang']) > 0)
+	if(strlen($_GET['lang']) > 0) {
 		$where .= " and langid=any(array[" . $_GET['lang'] . "])";
-	else
+		$whref .= " and langid is not null";
+	} elseif($block == 'lang') {
+		$where .= " and langid is not null";
+		$whref .= " and langid is not null";
+	} else {
 		$where .= " and langid is null";
+		$whref .= " and langid is null";
+	}
 
-	if(strlen($_GET['game']) > 0)
+	if(strlen($_GET['game']) > 0) {
 		$where .= " and titleid=any(array[" . $_GET['game']. "])";
+		$whref .= " and titleid is not null";
+	}
 
-	if(strlen($_GET['genre']) > 0)
+	if(strlen($_GET['genre']) > 0) {
 		$where .= " and titleid=any(select titleid from gamegenres where genreid=any(array[" . $_GET['genre'] . "]))";
+		$whref .= " and titleid is not null";
+	}
+
+	if(strlen($_GET['game']) == 0 && strlen($_GET['genre']) == 0)
+		if($block == 'game' || $block == 'genre')	{
+			$where .= " and titleid is not null";
+			$whref .= " and titleid is not null";
+		} else {
+			$where .= " and titleid is null";
+			$whref .= " and titleid is null";
+		}
 
 	$join = (strlen($_GET['genre']) > 0 || $block == 'genre') ? "join gamegenres using(titleid)" : "";
 
@@ -126,9 +152,9 @@ function getgraph()	{
 			utime,	
 			$sel,
 			sum(players) filter (where $where) as players,
-			sum(players) as refpl,
+			sum(players) filter (where $whref) as refpl,
 			sum(secs) filter (where $where) as secs,
-			sum(secs) as refsecs
+			sum(secs) filter (where $whref) as refsecs
 		from reptab$period
 		$join
 		where $sel = any(array[$list])
