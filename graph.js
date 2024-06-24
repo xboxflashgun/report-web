@@ -19,7 +19,6 @@ function read_graph()	{
 	var req = mkreqstr();
 	
 	var b = d3.select('input[name="graph"]:checked').property("value");
-	console.log(b);
 	var block = blocks[b];
 
 	if(block.sels)
@@ -111,7 +110,39 @@ function draw_graph()	{
 		});
 	});
 
+	var ymax = d3.max(Array.prototype.flat.call(Object.keys(graph.data).map(d => graph.data[d].map(e => e.val))));
+
+	console.log(ymax);
 	console.log(graph.data)
+
+	var x = d3.scaleTime( [ xmin, xmax ], [ 0, width ] );
+	var y = d3.scaleLinear( [ 0, ymax ], [ height, 0 ]);
+
+	var xaxis = d3.axisBottom().scale(x);
+	var yaxis = d3.axisLeft().scale(y).tickFormat(d3.format( abflg ? ".3~s" : ".0%"));
+	var color = d3.scaleOrdinal(Object.keys(graph.data), d3.schemeObservable10);
+
+	svg.selectAll(".xaxis").call( xaxis );
+	svg.selectAll(".yaxis").call( yaxis );
+
+	const t = d3.transition().duration(750);
+
+	svg.selectAll(".line")
+	.data(Object.keys(graph.data))
+	.join(enter => {
+		enter.append("path")
+			.attr("class", "line")
+			.attr("fill", "none")
+			.attr("data-id", id => id)
+			.attr("stroke", id => color(id))
+			.attr("stroke-width", 1.5)
+			.attr("d", id => d3.line(d => x(d.time), d => y(d.val) )(graph.data[id]));
+	}, update => {
+		update.call( s => s.transition(t)
+			.attr("stroke", id => color(id))
+			.attr("data-id", id => id)
+			.attr("d", id => d3.line(d => x(d.time), d => y(d.val) )(graph.data[id])));
+	}, exit => exit.remove() );
 
 
 }

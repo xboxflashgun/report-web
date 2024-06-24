@@ -206,12 +206,7 @@ function read_info() {
 
 	});
 
-	d3.selectAll("#graphsel input").on('change', e => {
-
-		console.log(e.target.value);
-		read_graph();
-
-	});
+	d3.selectAll("#graphsel input").on('change', e => read_graph() );
 
 }
 
