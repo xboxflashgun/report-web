@@ -54,14 +54,14 @@ function draw_table(b)	{
 			.text(d => (block.name[d.id].desc) ? block.name[d.id].desc : block.name[d.id].name);
 		row.append("td").attr("title", d => d.valabs).text(d => d3.format(".3~s")(d.valabs));
 		row.append("td").attr("title", d => 100 * d.valper + "%").text(d => d3.format(".3%")(d.valper));
-		row.style("background", d => `linear-gradient(to right, #050 ${100.*d.valabs/valmax}%, rgba(0,0,0,0) ${100.*d.valabs/valmax}% )`);
+		row.style("background", d => `linear-gradient(to right, #050 ${100.*d.val/valmax}%, rgba(0,0,0,0) ${100.*d.val/valmax}% )`);
 	}, update => {
 		update.attr("data-id", d => d.id);
 		update.select("td:nth-child(1)").attr("title", d => block.name[d.id].desc ? block.name[d.id].desc : block.name[d.id].name)
 			.text(d => (block.name[d.id].desc) ? block.name[d.id].desc : block.name[d.id].name);
 		update.select("td:nth-child(2)").attr("title", d => d.valabs).text(d => d3.format(".3~s")(d.valabs));
 		update.select("td:nth-child(3)").attr("title", d => 100 * d.valper + "%").text(d => d3.format(".3%")(d.valper));
-		update.style("background", d => `linear-gradient(to right, #050 ${100.*d.valabs/valmax}%, rgba(0,0,0,0) ${100.*d.valabs/valmax}% )`);
+		update.style("background", d => `linear-gradient(to right, #050 ${100.*d.val/valmax}%, rgba(0,0,0,0) ${100.*d.val/valmax}% )`);
 	}, exit => exit.remove()
 	);
 
