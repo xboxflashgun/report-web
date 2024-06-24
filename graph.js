@@ -241,6 +241,7 @@ function draw_graph()	{
 		row.append("td").text(d => "");
 		row.append("td").text(d => "");
 	}, update => {
+		update.select("td:nth-child(1)").style("color", id => color(id));
 		update.select("td:nth-child(2)").text(d => legtext(d));
 		update.attr("data-id", d => d);
 	}, exit => exit.remove()
