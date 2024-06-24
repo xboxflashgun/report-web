@@ -236,6 +236,24 @@ function draw_graph()	{
 	}, exit => exit.remove()
 	);
 
+	legend.select("#legend table").selectAll("tr")
+	.on("mouseover", e => {
+
+		var id = e.target.parentNode.dataset.id;
+		svg.selectAll(`path[data-id="${id}"]`)
+			.attr("stroke-width", 3);
+		d3.select(e.target.parentNode).style("color", "#fff");
+
+	})
+	.on("mouseout", e => {
+
+		var id = e.target.parentNode.dataset.id;
+		svg.selectAll(`path[data-id="${id}"]`)
+		.attr("stroke-width", 1.5);
+		d3.select(e.target.parentNode).style("color", "#999");
+
+	});
+
 	function legendavg()	{
 
 		Object.keys(graph.avg).forEach( id => {
