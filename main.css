@@ -173,3 +173,7 @@ input[type="text"]:focus {
 	color: #ccc;
 	padding-bottom: 4px;
 }
+
+#legend td:nth-child(n+3) {
+	text-align: right;
+}

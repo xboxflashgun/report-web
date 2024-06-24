@@ -87,6 +87,10 @@ function draw_graph()	{
 	
 	var units = d3.select('input[name="valtype"]:checked').property("value");
 	var abflg = d3.select('input[value="abs"]').property("checked");
+	var b = d3.select('input[name="graph"]:checked').property("value");
+	var legend = d3.select("#legend");
+
+
 
 	var ndays = (new Date() - new Date(2024, 2, 3))/3600/24/1000;
 	if(period === 1)
@@ -155,9 +159,44 @@ function draw_graph()	{
 			.attr("d", id => d3.line(d => x(d.time), d => y(d.val) )(graph.data[id])));
 	}, exit => exit.remove() );
 
-	// legend
-	var legend = d3.select("#legend")
+	var vline = d3.select("#graph-rect")
+	vline.select("rect")
+		.attr("pointer-events", "all")
+		.on("mousemove", e => {
 
+			var [ mx, my ] = d3.pointer(e);
+			if(mx < margin.left || mx > width + margin.left)
+				return;
+
+			vline.select("line")
+				.attr("x1", mx)
+				.attr("x2", mx)
+				.attr("y1", margin.top)
+				.attr("y2", height+margin.top)
+				.attr("display", null);
+
+			var t = x.invert(mx - margin.left);
+			var ind;
+
+			Object.keys(graph.data).forEach( id => {
+				ind = graph.data[id].findIndex( d => d.time > t );
+				var tr = legend.select(`tr[data-id="${id}"]`);
+				tr.select("td:nth-child(3)").text(d3.format(".3~s")(graph.data[id][ind-1].valabs));
+				tr.select("td:nth-child(4)").text(d3.format(".3%")(graph.data[id][ind-1].valper));
+			});
+
+			var names = [ 'Day', 'Week starting from', 'Month starting from', 'Quarter starting from', 'Year from' ];
+			legend.select(".legendhead").text(names[period] + " " + graph.data[Object.keys(graph.data)[0]][ind-1].time.toLocaleString().slice(0,17));
+
+		})
+		.on("mouseout", () => {
+
+			vline.select("line").attr("display", "none");
+			console.log("out");
+
+		});
+
+	// legend
 	legend
 		.style("top", "236px")
 		.style("left", "742px")
@@ -171,8 +210,6 @@ function draw_graph()	{
 		.on("end", (e) => legend.style("cursor", "default"))
 		);
 	
-	var b = d3.select('input[name="graph"]:checked').property("value");
-
 	function legtext(id)	{
 
 		if(id === "0")
@@ -191,6 +228,8 @@ function draw_graph()	{
 		row.attr("data-id", d => d);
 		row.append("td").html("&#x25a0;").style("color", id => color(id));
 		row.append("td").text(d => legtext(d))
+		row.append("td").text(d => "");
+		row.append("td").text(d => "");
 	}, update => {
 		update.select("td:nth-child(2)").text(d => legtext(d));
 		update.attr("data-id", d => d);
