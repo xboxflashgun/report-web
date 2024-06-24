@@ -45,7 +45,7 @@ function main()	{
 				draw_table(b);
 
 		});
-	
+
 	});
 
 }
@@ -163,6 +163,9 @@ function read_data(b)	{
 
 		draw_table(b);
 
+		if(b === d3.select('input[name="graph"]:checked').property("value"))
+			read_graph();
+
 	});
 
 }
@@ -201,7 +204,7 @@ function read_info() {
 function mkreqstr()	{
 
 	var req = "&period=" + period;
-	req += "&subj=" + d3.select('#info input[name="graph"]:checked').property("value");
+	req += "&block=" + d3.select('#info input[name="graph"]:checked').property("value");
 	Object.keys(blocks).forEach( b => {
 		if(blocks[b].sels)
 			req += "&" + b + "=" + Array.from(blocks[b].sels).join(',')
