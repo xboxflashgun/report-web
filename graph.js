@@ -55,13 +55,64 @@ function read_graph()	{
 
 		});
 
-		console.log(graph.data);
+		draw_graph();
 
 	});
 
 }
 
 function draw_graph()	{
+
+	var div = d3.select("#graph");
+
+	const margin = { top: 10, right: 10, bottom: 20, left: 40},
+		width = div.node().clientWidth - margin.left - margin.right,
+		height = div.node().clientHeight - margin.top - margin.bottom;
+
+	div.select("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom);
+
+	var svg = div.select("#graph-main")
+		.attr("transform", `translate(${margin.left},${margin.top})`);
+
+	svg.select(".xaxis")
+		.attr("transform", `translate(0, ${height})`);
+
+	var [ xmin, xmax ] = d3.extent(Array.prototype.flat.call(Object.keys(graph.data).map(d => graph.data[d].map(e => e.time))));
+
+	// calculating data for graph
+	
+	var units = d3.select('input[name="valtype"]:checked').property("value");
+	var abflg = d3.select('input[value="abs"]').property("checked");
+
+	var ndays = (new Date() - new Date(2024, 2, 3))/3600/24/1000;
+	if(period === 1)
+		ndays /= 7;				// week
+	else if(period === 2)
+		ndays /= 30.6;			// month
+	else if(period === 3)
+		ndays /= 91.3125;		// quarter
+	else if(period === 4)
+		ndays /= 365.25;
+
+	Object.keys(graph.data).forEach( id => {
+		graph.data[id].forEach( d => {
+			
+			if(units === 'players')
+				[ d.valabs, d.valper ] = [ d.players, d.players/d.refpl ];
+			else if(units === 'time')
+				[ d.valabs, d.valper ] = [ d.secs/3600, d.secs/d.refsecs ];
+			else
+				[ d.valabs, d.valper ] = [ d.secs/d.players/3600/ndays, (d.secs / d.players) / (d.refsecs/d.refpl) ];
+
+			d.val = (abflg) ? d.valabs : d.valper;
+
+		});
+	});
+
+	console.log(graph.data)
+
 
 }
 

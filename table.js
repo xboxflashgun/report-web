@@ -22,7 +22,7 @@ function draw_table(b)	{
 		else if(units === 'time')
 			[ d.valabs, d.valper ] = [ d.secs/3600, d.secs/block.secs ];
 		else
-			[ d.valabs, d.valper ] = [ d.secs/d.players/3600/ndays, (d.secs / d.players) / (block.secs/block.players) ]
+			[ d.valabs, d.valper ] = [ d.secs/d.players/3600/ndays, (d.secs / d.players) / (block.secs/block.players) ];
 
 		d.val = (abflg) ? d.valabs : d.valper;
 	

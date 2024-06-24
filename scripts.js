@@ -133,6 +133,8 @@ function read_catalogs()	{
 						draw_table(b);
 				});
 
+				read_graph();
+
 			});
 
 		});
@@ -198,6 +200,9 @@ function read_info() {
 		tab.select("tr:nth-child(3) td:nth-child(2)").text(res[0][0].countries);
 		tab.select("tr:nth-child(4) td:nth-child(2)").text(res[0][0].langs);
 		tab.select("tr:nth-child(5) td:nth-child(2)").text(res[0][0].genres);
+
+		if(d3.select('input[name="graph"]:checked').property("value") === 'info')
+			read_graph();
 
 	});
 

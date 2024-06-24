@@ -152,3 +152,10 @@ input[type="text"]:focus {
 	cursor: pointer;
 }
 
+#graph {
+	width: 990px;
+	height: 700px;
+	background-color: #224;
+	float: left;
+}
+
