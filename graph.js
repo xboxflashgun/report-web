@@ -12,6 +12,9 @@
 
 var graph = {
 	data: {},
+	avg: {},		// average val to sort legend
+	sum: {},		// sum for avg
+	cnt: {},		// cnt for agv
 };
 
 function read_graph()	{
@@ -95,7 +98,11 @@ function draw_graph()	{
 	else if(period === 4)
 		ndays /= 365.25;
 
+	Object.keys(graph.avg).forEach( id => { delete graph.avg[id]; delete graph.sum[id]; delete graph.cnt[id]; } );
 	Object.keys(graph.data).forEach( id => {
+
+		[ graph.sum[id], graph.cnt[id] ] = [ 0, 0 ];
+
 		graph.data[id].forEach( d => {
 			
 			if(units === 'players')
@@ -106,14 +113,18 @@ function draw_graph()	{
 				[ d.valabs, d.valper ] = [ d.secs/d.players/3600/ndays, (d.secs / d.players) / (d.refsecs/d.refpl) ];
 
 			d.val = (abflg) ? d.valabs : d.valper;
+			graph.sum[id] += d.val;
+			graph.cnt[id]++;
 
 		});
+
+		graph.avg[id] = graph.sum[id] / graph.cnt[id];
+
 	});
 
 	var ymax = d3.max(Array.prototype.flat.call(Object.keys(graph.data).map(d => graph.data[d].map(e => e.val))));
 
-	console.log(ymax);
-	console.log(graph.data)
+	console.log(graph);
 
 	var x = d3.scaleTime( [ xmin, xmax ], [ 0, width ] );
 	var y = d3.scaleLinear( [ 0, ymax ], [ height, 0 ]);
@@ -144,6 +155,47 @@ function draw_graph()	{
 			.attr("d", id => d3.line(d => x(d.time), d => y(d.val) )(graph.data[id])));
 	}, exit => exit.remove() );
 
+	// legend
+	var legend = d3.select("#legend")
+
+	legend
+		.style("top", "236px")
+		.style("left", "742px")
+		.style("display", null)
+		.call(d3.drag()
+		.on("start", (e) => legend.style("cursor", "drag"))
+		.on("drag", (e) => {
+			legend.style("top", legend.node().offsetTop + e.dy + "px");
+			legend.style("left", legend.node().offsetLeft + e.dx + "px");
+		})
+		.on("end", (e) => legend.style("cursor", "default"))
+		);
+	
+	var b = d3.select('input[name="graph"]:checked').property("value");
+
+	function legtext(id)	{
+
+		if(id === "0")
+			return "All games";
+
+		var text = blocks[b].name[id].desc ? blocks[b].name[id].desc : blocks[b].name[id].name;
+
+		return text;
+
+	}
+
+	legend.select("#legend table").selectAll("tr")
+	.data(Object.keys(graph.avg).sort( (a,b) => graph.avg[b] - graph.avg[a] ))
+	.join( enter => {
+		var row = enter.append("tr");
+		row.attr("data-id", d => d);
+		row.append("td").html("&#x25a0;").style("color", id => color(id));
+		row.append("td").text(d => legtext(d))
+	}, update => {
+		update.select("td:nth-child(2)").text(d => legtext(d));
+		update.attr("data-id", d => d);
+	}, exit => exit.remove()
+	);
 
 }
 

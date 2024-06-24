@@ -159,3 +159,17 @@ input[type="text"]:focus {
 	float: left;
 }
 
+#legend {
+	position: absolute;
+	background-color: rgba(64, 32, 64, 0.8);
+	color: #999;
+	padding: 10px;
+	border: 1px solid #999;
+	border-radius: 5px;
+}
+
+.legendhead {
+	border-bottom: 1px solid #bbb;
+	color: #ccc;
+	padding-bottom: 4px;
+}
