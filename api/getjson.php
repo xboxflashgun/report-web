@@ -77,7 +77,7 @@ function getinfo()	{
 		where $where
 	";
 
-	error_log($req);
+	# error_log($req);
 
 	$rep[] = pg_fetch_all(pg_query($req));
 	$rep[] = pg_fetch_all(pg_query("select sum(players) as players from repstat where $where"));

@@ -92,4 +92,57 @@ function getblock()	{
 
 }
 
+function getgraph()	{
+
+	global $db, $rep;
+
+	$block = $_GET['block'];
+	$period = $_GET['period'];
+	$list = $_GET['list'];
+	$where = "true";
+
+	$sel = ($block == 'info') ? "0" : (($block == 'game') ? "titleid" : $_GET['block']."id");
+
+	if(strlen($_GET['country']) > 0)
+		$where .= " and countryid=any(array[" . $_GET['country'] . "])";
+	else
+		$where .= " and countryid is null";
+
+	if(strlen($_GET['lang']) > 0)
+		$where .= " and langid=any(array[" . $_GET['lang'] . "])";
+	else
+		$where .= " and langid is null";
+
+	if(strlen($_GET['game']) > 0)
+		$where .= " and titleid=any(array[" . $_GET['game']. "])";
+
+	if(strlen($_GET['genre']) > 0)
+		$where .= " and titleid=any(select titleid from gamegenres where genreid=any(array[" . $_GET['genre'] . "]))";
+
+	$join = (strlen($_GET['genre']) > 0 || $block == 'genre') ? "join gamegenres using(titleid)" : "";
+
+	$req = "
+		select 
+			utime,	
+			$sel,
+			sum(players) filter (where $where) as players,
+			sum(players) as refpl,
+			sum(secs) filter (where $where) as secs,
+			sum(secs) as refsecs
+		from reptab$period
+		$join
+		where $sel = any(array[$list])
+		group by 1,2
+		order by 1
+	";
+		
+	error_log($req);
+
+	$rep = implode(pg_copy_to($db, "( $req )", chr(9)));
+
+}
+
+
+
+
 

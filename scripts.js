@@ -46,6 +46,8 @@ function main()	{
 
 		});
 
+		read_graph();
+
 	});
 
 }
@@ -196,6 +198,13 @@ function read_info() {
 		tab.select("tr:nth-child(3) td:nth-child(2)").text(res[0][0].countries);
 		tab.select("tr:nth-child(4) td:nth-child(2)").text(res[0][0].langs);
 		tab.select("tr:nth-child(5) td:nth-child(2)").text(res[0][0].genres);
+
+	});
+
+	d3.selectAll("#graphsel input").on('change', e => {
+
+		console.log(e.target.value);
+		read_graph();
 
 	});
 
