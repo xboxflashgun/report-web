@@ -176,20 +176,23 @@ function draw_graph()	{
 				.attr("display", null);
 
 			var t = x.invert(mx - margin.left);
-			var ind;
+			let indpr, idpr;
 
 			Object.keys(graph.data).forEach( id => {
 				ind = graph.data[id].findIndex( d => d.time > t );
 				var tr = legend.select(`tr[data-id="${id}"]`);
-				tr.select("td:nth-child(3)").text(d3.format(".3~s")(graph.data[id][ind-1].valabs));
-				tr.select("td:nth-child(4)").text(d3.format(".3%")(graph.data[id][ind-1].valper));
+				if(graph.data[id][ind-1]) {
+					tr.select("td:nth-child(3)").text(d3.format(".3~s")(graph.data[id][ind-1].valabs));
+					tr.select("td:nth-child(4)").text(d3.format(".3%")(graph.data[id][ind-1].valper));
+					[ indpr, idpr ] = [ ind, id ];
+				}
 			});
 
 			var names = [ 'Day', 'Week starting from', 'Month starting from', 'Quarter starting from', 'Year from' ];
-			legend.select(".legendhead").text(names[period] + " " + graph.data[Object.keys(graph.data)[0]][ind-1].time.toLocaleString().slice(0,17));
+			legend.select(".legendhead").text(names[period] + " " + graph.data[idpr][indpr-1].time.toLocaleString().slice(0,17));
 
 			Object.keys(graph.data).forEach( id => {
-				if(Math.abs(my - y(graph.data[id][ind-1].val) - margin.top) < 5) {
+				if(graph.data[id][indpr-1] && Math.abs(my - y(graph.data[id][indpr-1].val) - margin.top) < 5) {
 					legend.select(`tr[data-id="${id}"]`).style("color", "#fff");
 					svg.selectAll(`path[data-id="${id}"]`).attr("stroke-width", 3);
 				} else {
