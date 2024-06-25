@@ -26,7 +26,7 @@ $rep = "";
 if( substr( $_GET['f'], 0, 3) == 'get' )
 	$_GET['f']();
 
-$to = 1;		# timeout
+$to = 300;		# timeout
 
 $mc->set($_SERVER['QUERY_STRING'], $rep, $to);
 header("Cache-control: max-age=$to");

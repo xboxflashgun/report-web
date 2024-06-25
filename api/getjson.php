@@ -2,11 +2,21 @@
 
 header('Content-type: application/json');
 header("Cache-control: private");
-header("Cache-control: max-age=1");
 
 foreach ($_GET as $k => $v)
 	if(preg_match('/[^0-9a-z-]/', $k) || preg_match('/[^0-9a-zA-Z,-\/]/', $v))
 		die("Oops");
+
+$mc = new Memcached('xboxstat2');
+if (!count($mc->getServerList()))
+	$mc->addServer( '127.0.0.1', 11211 );
+
+$txt = $mc->get($_SERVER['QUERY_STRING']);
+
+if( $txt )      {
+	echo $txt;
+	return 0;
+}
 
 $db = pg_connect("port=6432 dbname=global user=readonly password=masha27uk")	# , PGSQL_CONNECT_FORCE_NEW)
 	or die("could not connect to DB");
@@ -16,7 +26,15 @@ $rep = array();
 if( substr( $_GET['f'], 0, 3) == 'get' )
 	$_GET['f']();
 
-echo json_encode($rep, JSON_UNESCAPED_UNICODE);
+$to = 300;      # timeout
+
+$txt = json_encode($rep, JSON_UNESCAPED_UNICODE);
+$mc->set($_SERVER['QUERY_STRING'], $txt, $to);
+
+
+header("Cache-control: max-age=$to");
+
+echo $txt;
 
 # functions goes here
 
