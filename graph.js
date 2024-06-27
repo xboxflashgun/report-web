@@ -190,7 +190,8 @@ function draw_graph()	{
 			});
 
 			var names = [ 'Day', 'Week starting from', 'Month starting from', 'Quarter starting from', 'Year from' ];
-			legend.select(".legendhead").text(names[period] + " " + graph.data[idpr][indpr-1].time.toLocaleString().slice(0,17));
+			var dow = new Intl.DateTimeFormat(undefined, { weekday: "short" }).format(graph.data[idpr][indpr-1].time);
+			legend.select(".legendhead").text(names[period] + " " + graph.data[idpr][indpr-1].time.toLocaleString().slice(0,17) + ", " + dow);
 
 			Object.keys(graph.data).forEach( id => {
 				if(graph.data[id][indpr-1] && Math.abs(my - y(graph.data[id][indpr-1].val) - margin.top) < 5) {

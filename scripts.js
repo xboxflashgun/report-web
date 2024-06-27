@@ -35,6 +35,8 @@ function main()	{
 		var p = 4 - e.target.cellIndex;
 		if(p === period)
 			return;
+		if(p === 3 || p === 4)
+			return;		// still no year and quarter
 		period = p;
 
 		d3.selectAll(".permark").classed("permark", false);
