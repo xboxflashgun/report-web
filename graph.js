@@ -114,7 +114,7 @@ function draw_graph()	{
 			else if(units === 'time')
 				[ d.valabs, d.valper ] = [ d.secs/3600, d.secs/d.refsecs ];
 			else
-				[ d.valabs, d.valper ] = [ d.secs/d.players/3600/ndays, (d.secs / d.players) / (d.refsecs/d.refpl) ];
+				[ d.valabs, d.valper ] = [ d.secs/((d.players) ? d.players : 1)/3600/ndays, (d.secs / ((d.players) ? d.players : 1)) / (d.refsecs/d.refpl) ];
 
 			d.val = (abflg) ? d.valabs : d.valper;
 			graph.sum[id] += d.val;
@@ -182,7 +182,8 @@ function draw_graph()	{
 				ind = graph.data[id].findIndex( d => d.time > t );
 				var tr = legend.select(`tr[data-id="${id}"]`);
 				if(graph.data[id][ind-1]) {
-					tr.select("td:nth-child(3)").text(d3.format(".3~s")(graph.data[id][ind-1].valabs));
+					tr.select("td:nth-child(3)").text((units === 'players') ? d3.format(".3~s")(graph.data[id][ind-1].valabs)
+											: hours2str(graph.data[id][ind-1].valabs));
 					tr.select("td:nth-child(4)").text(d3.format(".3%")(graph.data[id][ind-1].valper));
 					[ indpr, idpr ] = [ ind, id ];
 				}
@@ -272,7 +273,14 @@ function draw_graph()	{
 
 		Object.keys(graph.avg).forEach( id => {
 			var tr = legend.select(`tr[data-id="${id}"]`);
-			tr.select("td:nth-child(3)").text( d3.format(abflg ? ".3~s" : ".3%")(graph.avg[id]) );
+			var v = graph.avg[id];
+			if( ! abflg )
+				v = d3.format(".3%")(v);
+			else if(units === 'players')
+				v = d3.format(".3~s")(v);
+			else
+				v = hours2str(v);
+			tr.select("td:nth-child(3)").text( v );
 			tr.select("td:nth-child(4)").text("");
 		});
 		legend.select(".legendhead").text("Average over graph");

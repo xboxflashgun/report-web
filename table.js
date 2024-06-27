@@ -22,7 +22,8 @@ function draw_table(b)	{
 		else if(units === 'time')
 			[ d.valabs, d.valper ] = [ d.secs/3600, d.secs/block.secs ];
 		else
-			[ d.valabs, d.valper ] = [ d.secs/d.players/3600/ndays, (d.secs / d.players) / (block.secs/block.players) ];
+			[ d.valabs, d.valper ] = [ d.secs/((d.players) ? d.players : 1)/3600/ndays, 
+							(d.secs / ((d.players) ? d.players : 1)) / (block.secs/block.players) ];
 
 		d.val = (abflg) ? d.valabs : d.valper;
 	
@@ -52,14 +53,14 @@ function draw_table(b)	{
 		row.attr("data-id", d => d.id);
 		row.append("td").attr("title", d => block.name[d.id].desc ? block.name[d.id].desc : block.name[d.id].name)
 			.text(d => (block.name[d.id].desc) ? block.name[d.id].desc : block.name[d.id].name);
-		row.append("td").attr("title", d => d.valabs).text(d => d3.format(".3~s")(d.valabs));
+		row.append("td").attr("title", d => d.valabs).text(d => (units === 'players') ? d3.format(".3~s")(d.valabs) : hours2str(d.valabs));
 		row.append("td").attr("title", d => 100 * d.valper + "%").text(d => d3.format(".3%")(d.valper));
 		row.style("background", d => `linear-gradient(to right, #050 ${100.*d.val/valmax}%, rgba(0,0,0,0) ${100.*d.val/valmax}% )`);
 	}, update => {
 		update.attr("data-id", d => d.id);
 		update.select("td:nth-child(1)").attr("title", d => block.name[d.id].desc ? block.name[d.id].desc : block.name[d.id].name)
 			.text(d => (block.name[d.id].desc) ? block.name[d.id].desc : block.name[d.id].name);
-		update.select("td:nth-child(2)").attr("title", d => d.valabs).text(d => d3.format(".3~s")(d.valabs));
+		update.select("td:nth-child(2)").attr("title", d => d.valabs).text(d => (units === 'players') ? d3.format(".3~s")(d.valabs) : hours2str(d.valabs));
 		update.select("td:nth-child(3)").attr("title", d => 100 * d.valper + "%").text(d => d3.format(".3%")(d.valper));
 		update.style("background", d => `linear-gradient(to right, #050 ${100.*d.val/valmax}%, rgba(0,0,0,0) ${100.*d.val/valmax}% )`);
 	}, exit => exit.remove()

@@ -222,3 +222,15 @@ function mkreqstr()	{
 	return req;
 
 }
+
+function hours2str(hours)	{
+
+	var h = hours | 0;
+	var m = ((hours - h)*60) | 0;
+	if(h < 100)	{
+		m = ((m < 10) ? "0" : "") + m;
+		return h + ":" + m;
+	}
+	return d3.format(".3~s")(hours);
+
+}

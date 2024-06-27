@@ -147,6 +147,9 @@ function getgraph()	{
 
 	$join = (strlen($_GET['genre']) > 0 || $block == 'genre') ? "join gamegenres using(titleid)" : "";
 
+	if($list == '')
+		$list = 0;
+
 	$req = "
 		select 
 			utime,	
@@ -162,7 +165,7 @@ function getgraph()	{
 		order by 1
 	";
 		
-	error_log($req);
+	# error_log($req);
 
 	$rep = implode(pg_copy_to($db, "( $req )", chr(9)));
 
