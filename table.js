@@ -38,13 +38,13 @@ function draw_table(b)	{
 	else
 		fff = a => true;
 
-	var valmax = d3.max(block.data.filter(d => fff(block.name[d.id].name)), d => d.val);
+	var valmax = d3.max(block.data.filter(d => fff( (block.name[d.id].desc ? block.name[d.id].desc : "" ) + block.name[d.id].name)), d => d.val);
 
 	input.on('input', () => draw_table(b) );
 
 	tab.selectAll("tr")
 	.data(block.data
-		.filter(d => fff(block.name[d.id].name))
+		.filter(d => fff((block.name[d.id].desc ? block.name[d.id].desc : "" ) + block.name[d.id].name))
 		.sort( (a,b) => b.val - a.val )
 		.slice(0, 500)
 	)
@@ -78,6 +78,13 @@ function draw_table(b)	{
 
 		list_filters();
 		read_alldata();
+
+	});
+
+	d3.select("#" + b + " .clearstr").on('click', () => {
+
+		input.property("value", "");
+		draw_table(b);
 
 	});
 
