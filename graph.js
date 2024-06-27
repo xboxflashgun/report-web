@@ -30,8 +30,6 @@ function read_graph()	{
 		else
 			req += "&list=" + block.data.sort( (a,b) => b.val - a.val ).slice(0,10).map(d => d.id).join(',');
 
-	console.log(req);
-
 	fetch("api/gettsv.php?f=getgraph" + req)
 	.then( res => res.text() )
 	.then( res => {
@@ -102,6 +100,57 @@ function draw_graph()	{
 	else if(period === 4)
 		ndays /= 365.25;
 
+	// dealing with percentage
+	if( ! abflg )	{
+
+		var nosels = true;		// if no selections of interest
+
+		Object.keys(blocks).forEach( bb => {
+
+			if(b === bb || (b === 'game' && bb === 'genre') || bb === 'info')
+				return;
+			if(blocks[bb].sels.size > 0)
+				nosels = false;
+
+		});
+
+		// if no sels -- need to change ref to sum or max, max for avgtime only
+		var refpl = {};
+		var refsecs = {};
+		var refcnt = {};
+		Object.keys(graph.data).forEach( id => {
+
+			graph.data[id].forEach( d => {
+
+				refsecs[d.utime] ??= 0;
+				refpl[d.utime] ??= 0;
+				refcnt[d.utime] ??= 0;
+				refsecs[d.utime] += d.secs;
+				refpl[d.utime] += d.players;
+				refcnt[d.utime] ++;
+
+			});
+
+		});
+
+		Object.keys(graph.data).forEach( id => {
+
+			graph.data[id].forEach( d => {
+
+				if(units === 'avgt')	{
+					d.refpl = refpl[d.utime]/refcnt[d.utime];
+					d.refsecs = refsecs[d.utime]/refcnt[d.utime];
+				} else {
+					d.refpl = refpl[d.utime];
+					d.refsecs = refsecs[d.utime];
+				}
+
+			});
+
+		});
+
+	}
+
 	Object.keys(graph.avg).forEach( id => { delete graph.avg[id]; delete graph.sum[id]; delete graph.cnt[id]; } );
 	Object.keys(graph.data).forEach( id => {
 
@@ -126,9 +175,8 @@ function draw_graph()	{
 
 	});
 
-	var ymax = d3.max(Array.prototype.flat.call(Object.keys(graph.data).map(d => graph.data[d].map(e => e.val))));
 
-	console.log(graph);
+	var ymax = d3.max(Array.prototype.flat.call(Object.keys(graph.data).map(d => graph.data[d].map(e => e.val))));
 
 	var x = d3.scaleTime( [ xmin, xmax ], [ 0, width ] );
 	var y = d3.scaleLinear( [ 0, ymax ], [ height, 0 ]);
@@ -191,7 +239,7 @@ function draw_graph()	{
 
 			var names = [ 'Day', 'Week starting from', 'Month starting from', 'Quarter starting from', 'Year from' ];
 			var dow = new Intl.DateTimeFormat(undefined, { weekday: "short" }).format(graph.data[idpr][indpr-1].time);
-			legend.select(".legendhead").text(names[period] + " " + graph.data[idpr][indpr-1].time.toLocaleString().slice(0,17) + ", " + dow);
+			legend.select(".legendhead").text(names[period] + " " + graph.data[idpr][indpr-1].time.toLocaleString().slice(0,10) + ", " + dow);
 
 			Object.keys(graph.data).forEach( id => {
 				if(graph.data[id][indpr-1] && Math.abs(my - y(graph.data[id][indpr-1].val) - margin.top) < 5) {
