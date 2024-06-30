@@ -18,7 +18,10 @@ if( $rep )      {
 	return 0;
 }
 
-$db = pg_connect("port=6432 dbname=global user=readonly password=masha27uk")	# , PGSQL_CONNECT_FORCE_NEW)
+// to github users: db server is answering to unix sockets only, so don't be excited with password provided here :)
+// Drop me a message if you want access to my PostgreSQL
+
+$db = pg_connect("port=6432 host=/tmp dbname=global user=readonly password=masha27uk")	# , PGSQL_CONNECT_FORCE_NEW)
 	or die("could not connect to DB");
 
 $rep = "";
