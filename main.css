@@ -183,3 +183,9 @@ input[type="text"]:focus {
 #legend td:nth-child(n+3) {
 	text-align: right;
 }
+
+input[type="radio"] {
+	border: 0px;
+	height: 12px;
+}
+
