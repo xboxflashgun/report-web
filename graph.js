@@ -101,13 +101,13 @@ function draw_graph()	{
 		ndays /= 365.25;
 
 	// dealing with percentage
-	if( ! abflg )	{
+	if( 1 )	{
 
 		var nosels = true;		// if no selections of interest
 
 		Object.keys(blocks).forEach( bb => {
 
-			if(b === bb || (b === 'game' && bb === 'genre') || bb === 'info')
+			if( (b === bb) || (b === 'game' && bb === 'genre') || bb === 'info')
 				return;
 			if(blocks[bb].sels.size > 0)
 				nosels = false;
