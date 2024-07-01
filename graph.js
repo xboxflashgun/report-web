@@ -207,6 +207,25 @@ function draw_graph()	{
 			.attr("d", id => d3.line(d => x(d.time), d => y(d.val) )(graph.data[id])));
 	}, exit => exit.remove() );
 
+	function draw_points(id, radius) {
+
+		var line = d3.select("#points");
+
+		if(line.select(`circle[data-id="${id}"]`).empty())
+			graph.data[id].forEach( d => {
+
+				line.append("circle")
+					.attr("r", radius)
+					.attr("class", "point")
+					.attr("data-id", id)
+					.attr("fill", color(id))
+					.attr("cx", x(d.time) + margin.left)
+					.attr("cy", y(d.val) + margin.top);
+
+			});
+
+	}
+
 	var vline = d3.select("#graph-rect")
 	vline.select("rect")
 		.attr("pointer-events", "all")
@@ -242,12 +261,14 @@ function draw_graph()	{
 			legend.select(".legendhead").text(names[period] + " " + graph.data[idpr][indpr-1].time.toLocaleString().slice(0,10) + ", " + dow);
 
 			Object.keys(graph.data).forEach( id => {
-				if(graph.data[id][indpr-1] && Math.abs(my - y(graph.data[id][indpr-1].val) - margin.top) < 5) {
+				if(graph.data[id][indpr-1] && Math.abs(my - y(graph.data[id][indpr-1].val) - margin.top) < 6) {
 					legend.select(`tr[data-id="${id}"]`).style("color", "#fff");
 					svg.selectAll(`path[data-id="${id}"]`).attr("stroke-width", 3);
+					draw_points(id, 3);
 				} else {
 					legend.select(`tr[data-id="${id}"]`).style("color", "#999");
 					svg.selectAll(`path[data-id="${id}"]`).attr("stroke-width", 1.5);
+					d3.selectAll(`#points circle[data-id="${id}"]`).remove();
 				}
 			});
 
@@ -255,6 +276,7 @@ function draw_graph()	{
 		.on("mouseout", () => {
 
 			vline.select("line").attr("display", "none");
+			d3.selectAll(".point").remove();
 			legendavg();
 
 		});
@@ -307,6 +329,7 @@ function draw_graph()	{
 		svg.selectAll(`path[data-id="${id}"]`)
 			.attr("stroke-width", 3);
 		d3.select(e.target.parentNode).style("color", "#fff");
+		draw_points(id, 3);
 
 	})
 	.on("mouseout", e => {
@@ -315,6 +338,7 @@ function draw_graph()	{
 		svg.selectAll(`path[data-id="${id}"]`)
 		.attr("stroke-width", 1.5);
 		d3.select(e.target.parentNode).style("color", "#999");
+		d3.selectAll(".point").remove();
 
 	});
 
