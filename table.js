@@ -81,6 +81,13 @@ function draw_table(b)	{
 
 	});
 
+	tab.selectAll("tr").on('contextmenu', (e) => {
+		
+		e.preventDefault();
+		console.log(b, e.target.parentNode.dataset.id);
+
+	});
+
 	d3.select("#" + b + " .clearstr").on('click', () => {
 
 		input.property("value", "");
