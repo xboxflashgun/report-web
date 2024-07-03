@@ -115,39 +115,43 @@ function draw_graph()	{
 		});
 
 		// if no sels -- need to change ref to sum or max, max for avgtime only
-		var refpl = {};
-		var refsecs = {};
-		var refcnt = {};
-		Object.keys(graph.data).forEach( id => {
+		if(nosels)	{
 
-			graph.data[id].forEach( d => {
+			var refpl = {};
+			var refsecs = {};
+			var refcnt = {};
+			Object.keys(graph.data).forEach( id => {
 
-				refsecs[d.utime] ??= 0;
-				refpl[d.utime] ??= 0;
-				refcnt[d.utime] ??= 0;
-				refsecs[d.utime] += d.secs;
-				refpl[d.utime] += d.players;
-				refcnt[d.utime] ++;
+				graph.data[id].forEach( d => {
 
-			});
+					refsecs[d.utime] ??= 0;
+					refpl[d.utime] ??= 0;
+					refcnt[d.utime] ??= 0;
+					refsecs[d.utime] += d.secs;
+					refpl[d.utime] += d.players;
+					refcnt[d.utime] ++;
 
-		});
-
-		Object.keys(graph.data).forEach( id => {
-
-			graph.data[id].forEach( d => {
-
-				if(units === 'avgt')	{
-					d.refpl = refpl[d.utime]/refcnt[d.utime];
-					d.refsecs = refsecs[d.utime]/refcnt[d.utime];
-				} else {
-					d.refpl = refpl[d.utime];
-					d.refsecs = refsecs[d.utime];
-				}
+				});
 
 			});
 
-		});
+			Object.keys(graph.data).forEach( id => {
+
+				graph.data[id].forEach( d => {
+
+					if(units === 'avgt')	{
+						d.refpl = refpl[d.utime]/refcnt[d.utime];
+						d.refsecs = refsecs[d.utime]/refcnt[d.utime];
+					} else {
+						d.refpl = refpl[d.utime];
+						d.refsecs = refsecs[d.utime];
+					}
+
+				});
+
+			});
+
+		}
 
 	}
 
